@@ -27,5 +27,6 @@ end)
 The function will only call if the user enters the correct password.
 Maximum of 4 characters for a password. 
 
+!https://files.fivemerr.com/images/ddb16e98-7c7d-4f2b-b203-914e00c32e10.gif
 
 ### Made using [lj-boilerplate](https://github.com/loljoshie/lj-boilerplate)
