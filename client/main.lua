@@ -22,6 +22,7 @@ local function OpenNUI(expectedValue)
         expectedValue = expectedValue,
         keypadPosition = Config.KeypadPosition
     })
+    return exports['md-keypad']:AwaitNUIResponse('keypadResult')
 end
 
 local function CloseNUI()
@@ -32,15 +33,28 @@ local function CloseNUI()
     })
 end
 
+exports('AwaitNUIResponse', function(responseType)
+    local p = promise.new()
+    RegisterNUICallback(responseType, function(data, cb)
+        p:resolve(data)
+        cb('ok')
+    end)
+    return Citizen.Await(p)
+end)
+
 RegisterNUICallback('close', function(data, cb)
     CloseNUI()
     cb('ok')
 end)
 
-RegisterNUICallback('success', function(data, cb)
-    TriggerServerEvent('md-keypad:success')
-    cb('ok')
+RegisterNetEvent('md-keypad:openNUI')
+AddEventHandler('md-keypad:openNUI', function(expectedValue)
+    local result = OpenNUI(expectedValue)
+    if result.success then
+        TriggerServerEvent('md-keypad:success')
+    end
+    Wait(500)
+    CloseNUI()
 end)
 
-RegisterNetEvent('md-keypad:openNUI', OpenNUI)
 RegisterNetEvent('md-keypad:closeNUI', CloseNUI)

@@ -1,20 +1,6 @@
 local expectedValue = nil
 local successCallback = nil
 
-if Config.Debug then
-    RegisterServerEvent('md-keypad:testOpen')
-    AddEventHandler('md-keypad:testOpen', function(value)
-        OpenNUI(source, value, function()
-            print('Keypad opened successfully for testing')
-        end)
-    end)
-
-    RegisterServerEvent('md-keypad:testClose')
-    AddEventHandler('md-keypad:testClose', function()
-        CloseNUI(source)
-    end)
-end
-
 local function OpenNUI(player, value, cb)
     if value == nil then
         print('^1ERROR: Expected a value to open the keypad. Received none.^0')
@@ -45,7 +31,22 @@ AddEventHandler('md-keypad:success', function()
     if successCallback then
         successCallback()
     end
+    CloseNUI(source)
 end)
+
+if Config.Debug then
+    RegisterServerEvent('md-keypad:testOpen')
+    AddEventHandler('md-keypad:testOpen', function(value)
+        OpenNUI(source, value, function()
+            print('Keypad opened successfully for testing')
+        end)
+    end)
+
+    RegisterServerEvent('md-keypad:testClose')
+    AddEventHandler('md-keypad:testClose', function()
+        CloseNUI(source)
+    end)
+end
 
 --exports('md-keypad', {
 --    Open = function(player, value, cb)
